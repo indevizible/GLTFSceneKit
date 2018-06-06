@@ -1031,17 +1031,20 @@ public class GLTFUnarchiver {
         }
         
         material.isDoubleSided = glMaterial.doubleSided
-        
+        do {
         material.shaderModifiers = [
-            .surface: try! String(contentsOf: URL(fileURLWithPath: Bundle(for: GLTFUnarchiver.self).path(forResource: "GLTFShaderModifierSurface", ofType: "shader")!), encoding: String.Encoding.utf8)
+            .surface: try String(contentsOf: URL(fileURLWithPath: Bundle(for: GLTFUnarchiver.self).path(forResource: "GLTFShaderModifierSurface", ofType: "shader")!), encoding: String.Encoding.utf8)
         ]
         #if SEEMS_TO_HAVE_DOUBLESIDED_BUG
             if material.isDoubleSided {
                 material.shaderModifiers = [
-                    .surface: try! String(contentsOf: URL(fileURLWithPath: Bundle(for: GLTFUnarchiver.self).path(forResource: "GLTFShaderModifierSurface_doubleSidedWorkaround", ofType: "shader")!), encoding: String.Encoding.utf8)
+                    .surface: try String(contentsOf: URL(fileURLWithPath: Bundle(for: GLTFUnarchiver.self).path(forResource: "GLTFShaderModifierSurface_doubleSidedWorkaround", ofType: "shader")!), encoding: String.Encoding.utf8)
                 ]
             }
         #endif
+        } catch (let error) {
+            print(error)
+        }
 
         switch glMaterial.alphaMode {
         case "OPAQUE":
